@@ -1,56 +1,51 @@
+
 const API_URL = 'https://www.themealdb.com/api/json/v1/1'
 
-export async function searchRecipes(query = '') {
-  const response = await fetch(
-    `${API_URL}/search.php?s=${encodeURIComponent(query)}`
-  )
+async function fetchData(endpoint) {
+  try {
+    const response = await fetch(`${API_URL}/${endpoint}`)
 
-  if (!response.ok) {
-    throw new Error('No se pudieron obtener las recetas')
+    if (!response.ok) {
+      throw new Error('Error al conectar con el servidor')
+    }
+
+    return await response.json()
+
+  } catch (error) {
+    console.error('Error en la API:', error)
+
+    throw new Error(
+      'No pudimos obtener la información. Revisá tu conexión e intentá nuevamente.'
+    )
   }
+}
 
-  const data = await response.json()
+export async function searchRecipes(query = '') {
+  const data = await fetchData(
+    `search.php?s=${encodeURIComponent(query)}`
+  )
 
   return data.meals || []
 }
 
 export async function getRecipeById(id) {
-  const response = await fetch(
-    `${API_URL}/lookup.php?i=${id}`
+  const data = await fetchData(
+    `lookup.php?i=${encodeURIComponent(id)}`
   )
-
-  if (!response.ok) {
-    throw new Error('No se pudo obtener el detalle')
-  }
-
-  const data = await response.json()
 
   return data.meals?.[0] || null
 }
 
 export async function getCategories() {
-  const response = await fetch(
-    `${API_URL}/categories.php`
-  )
-
-  if (!response.ok) {
-    throw new Error('No se pudieron obtener las categorías')
-  }
-
-  const data = await response.json()
+  const data = await fetchData('categories.php')
 
   return data.categories || []
 }
+
 export async function getRecipesByCategory(category) {
-  const response = await fetch(
-    `${API_URL}/filter.php?c=${encodeURIComponent(category)}`
+  const data = await fetchData(
+    `filter.php?c=${encodeURIComponent(category)}`
   )
-
-  if (!response.ok) {
-    throw new Error('No se pudieron obtener las recetas')
-  }
-
-  const data = await response.json()
 
   return data.meals || []
 }

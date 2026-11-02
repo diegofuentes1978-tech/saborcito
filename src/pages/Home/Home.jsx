@@ -7,9 +7,26 @@ import SearchBar from '../../components/SearchBar/SearchBar'
 import RecipeCard from '../../components/RecipeCard/RecipeCard'
 
 import { useRecipes } from '../../hooks/useRecipes'
-import { getCategories } from '/src/service/recipeApi.js'
+import { getCategories } from '../../service/recipeApi'
 
 import styles from './Home.module.css'
+
+const categoryTranslations = {
+  Beef: 'Carne vacuna',
+  Chicken: 'Pollo',
+  Dessert: 'Postres',
+  Lamb: 'Cordero',
+  Miscellaneous: 'Varios',
+  Pasta: 'Pastas',
+  Pork: 'Cerdo',
+  Seafood: 'Mariscos y pescados',
+  Side: 'Guarniciones',
+  Starter: 'Entradas',
+  Vegan: 'Veganas',
+  Vegetarian: 'Vegetarianas',
+  Breakfast: 'Desayunos',
+  Goat: 'Cabrito'
+}
 
 function Home() {
   const [query, setQuery] = useState('')
@@ -42,6 +59,10 @@ function Home() {
   function handleCategory(value) {
     setCategory(value)
     setQuery('')
+  }
+
+  function translateCategory(name) {
+    return categoryTranslations[name] || name
   }
 
   return (
@@ -94,7 +115,7 @@ function Home() {
                   handleCategory(item.strCategory)
                 }
               >
-                {item.strCategory}
+                {translateCategory(item.strCategory)}
               </Button>
             ))}
           </div>
@@ -103,7 +124,7 @@ function Home() {
         <section className={styles.recipes}>
           <h2>
             {category
-              ? `Recetas de ${category}`
+              ? `Recetas de ${translateCategory(category)}`
               : query
                 ? 'Resultados de búsqueda'
                 : 'Recetas para inspirarte ✨'}

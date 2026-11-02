@@ -1,0 +1,143 @@
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px 25px;
+}
+
+.container h1 {
+  color: #f26b4f;
+  font-size: 32px;
+}
+
+.description {
+  color: #777;
+  margin: 10px 0 30px;
+}
+
+.formCard {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.formCard h2 {
+  color: #f26b4f;
+  margin-bottom: 25px;
+}
+
+.formCard form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.formCard label {
+  font-weight: 600;
+  color: #444;
+}
+
+.formCard input,
+.formCard textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.formCard input:focus,
+.formCard textarea:focus {
+  outline: none;
+  border-color: #f26b4f;
+}
+
+.formCard form button {
+  background: #f26b4f;
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.formCard form button:hover {
+  background: #db553a;
+}
+
+.list {
+  margin-top: 45px;
+}
+
+.list h2 {
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+.recipeCard {
+  background: white;
+  padding: 15px;
+  border-radius: 18px;
+}
+
+.recipeCard img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.recipeCard h3 {
+  margin: 15px 0;
+}
+
+.recipeCard p {
+  color: #777;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.deleteButton {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+@media (max-width: 650px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.actions button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  background: #f26b4f;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.actions .deleteButton {
+  background: #e74c3c;
+}

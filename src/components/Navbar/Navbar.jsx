@@ -12,10 +12,44 @@ function Navbar() {
         </Link>
 
         <nav className={styles.nav}>
-          <NavLink to="/">Inicio</NavLink>
-          <NavLink to="/favoritos">Favoritos</NavLink>
-          <NavLink to="/mis-recetas">Mis recetas</NavLink>
-          <NavLink to="/nosotros">Nosotros</NavLink>
+
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              isActive ? styles.active : ''
+            }
+          >
+            🏠 Inicio
+          </NavLink>
+
+          <NavLink
+            to="/favoritos"
+            className={({ isActive }) =>
+              isActive ? styles.active : ''
+            }
+          >
+            ❤️ Favoritos
+          </NavLink>
+
+          <NavLink
+            to="/mis-recetas"
+            className={({ isActive }) =>
+              isActive ? styles.active : ''
+            }
+          >
+            📝 Mis recetas
+          </NavLink>
+
+          <NavLink
+            to="/nosotros"
+            className={({ isActive }) =>
+              isActive ? styles.active : ''
+            }
+          >
+            🍰 Nosotros
+          </NavLink>
+
         </nav>
 
       </div>

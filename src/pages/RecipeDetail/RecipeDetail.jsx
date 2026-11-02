@@ -4,9 +4,62 @@ import { useParams, Link } from 'react-router-dom'
 import { CircularProgress, Button } from '@mui/material'
 
 import Navbar from '../../components/Navbar/Navbar'
-import { getRecipeById } from '/src/service/recipeApi'
+
+import {
+  getRecipeById
+} from '../../service/recipeApi'
+
+import {
+  translateRecipeName,
+  translateCategory,
+  translateIngredient,
+  translateArea,
+  translateMeasure
+} from '../../utils/translations'
 
 import styles from './RecipeDetail.module.css'
+
+// Divide textos largos en fragmentos para traducirlos
+async function translateLongText(text) {
+  const words = text.split(/\s+/)
+  const chunks = []
+  let currentChunk = ''
+
+  words.forEach((word) => {
+    if ((currentChunk + ' ' + word).length > 450) {
+      chunks.push(currentChunk)
+      currentChunk = word
+    } else {
+      currentChunk += (currentChunk ? ' ' : '') + word
+    }
+  })
+
+  if (currentChunk) {
+    chunks.push(currentChunk)
+  }
+
+  const translatedChunks = []
+
+  for (const chunk of chunks) {
+    const response = await fetch(
+      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=en|es`
+    )
+
+    if (!response.ok) {
+      throw new Error('No se pudo traducir el texto')
+    }
+
+    const data = await response.json()
+
+    if (data.responseStatus !== 200) {
+      throw new Error('El servicio de traducción no está disponible')
+    }
+
+    translatedChunks.push(data.responseData.translatedText)
+  }
+
+  return translatedChunks.join(' ')
+}
 
 function RecipeDetail() {
   const { id } = useParams()
@@ -14,6 +67,9 @@ function RecipeDetail() {
   const [recipe, setRecipe] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [instructionsEs, setInstructionsEs] = useState('')
+  const [translating, setTranslating] = useState(false)
+  const [translationError, setTranslationError] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -22,6 +78,7 @@ function RecipeDetail() {
       try {
         setLoading(true)
         setError('')
+        setRecipe(null)
 
         const data = await getRecipeById(id)
 
@@ -34,7 +91,7 @@ function RecipeDetail() {
         }
       } catch (err) {
         if (active) {
-          setError(err.message)
+          setError('No pudimos cargar la receta. Intentá nuevamente.')
         }
       } finally {
         if (active) {
@@ -50,6 +107,44 @@ function RecipeDetail() {
     }
   }, [id])
 
+  // Traducir las instrucciones cuando se carga la receta
+  useEffect(() => {
+    if (!recipe?.strInstructions) return
+
+    let active = true
+
+    async function translateInstructions() {
+      try {
+        setTranslating(true)
+        setTranslationError(false)
+        setInstructionsEs('')
+
+        const translated = await translateLongText(
+          recipe.strInstructions
+        )
+
+        if (active) {
+          setInstructionsEs(translated)
+        }
+      } catch (err) {
+        if (active) {
+          setInstructionsEs(recipe.strInstructions)
+          setTranslationError(true)
+        }
+      } finally {
+        if (active) {
+          setTranslating(false)
+        }
+      }
+    }
+
+    translateInstructions()
+
+    return () => {
+      active = false
+    }
+  }, [recipe])
+
   function getIngredients() {
     if (!recipe) return []
 
@@ -61,8 +156,8 @@ function RecipeDetail() {
 
       if (ingredient && ingredient.trim()) {
         ingredients.push({
-          name: ingredient,
-          measure: measure || ''
+          name: translateIngredient(ingredient),
+          measure: translateMeasure(measure || '')
         })
       }
     }
@@ -82,12 +177,12 @@ function RecipeDetail() {
     )
   }
 
-  if (error) {
+  if (error || !recipe) {
     return (
       <>
         <Navbar />
         <div className={styles.message}>
-          <h2>{error}</h2>
+          <h2>{error || 'No encontramos esta receta.'}</h2>
           <Button component={Link} to="/">
             Volver al inicio
           </Button>
@@ -109,20 +204,22 @@ function RecipeDetail() {
         <div className={styles.header}>
           <img
             src={recipe.strMealThumb}
-            alt={recipe.strMeal}
+            alt={translateRecipeName(recipe.strMeal)}
           />
 
           <div>
             <span className={styles.category}>
-              {recipe.strCategory}
+              {translateCategory(recipe.strCategory)}
             </span>
 
-            <h1>{recipe.strMeal}</h1>
+            <h1>{translateRecipeName(recipe.strMeal)}</h1>
 
-            <p>🌎 Origen: {recipe.strArea}</p>
+            <p>
+              🌎 Origen: {translateArea(recipe.strArea)}
+            </p>
 
             {recipe.strTags && (
-              <p>🏷️ {recipe.strTags}</p>
+              <p>🏷️ Etiquetas: {recipe.strTags}</p>
             )}
           </div>
         </div>
@@ -146,7 +243,23 @@ function RecipeDetail() {
           <div className={styles.instructions}>
             <h2>👩‍🍳 Preparación</h2>
 
-            <p>{recipe.strInstructions}</p>
+            {translating ? (
+              <div>
+                <CircularProgress size={22} />
+                <p>Traduciendo la preparación al español...</p>
+              </div>
+            ) : (
+              <>
+                {translationError && (
+                  <p>
+                    No pudimos traducir esta preparación.
+                    Mostramos el texto original.
+                  </p>
+                )}
+
+                <p>{instructionsEs}</p>
+              </>
+            )}
 
             {recipe.strYoutube && (
               <Button

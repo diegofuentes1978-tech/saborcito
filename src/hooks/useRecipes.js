@@ -27,7 +27,7 @@ export function useRecipes(query = '', category = '') {
         }
       } catch (err) {
         if (active) {
-          setError(err.message)
+          setError('No pudimos cargar las recetas. Revisá tu conexión e intentá nuevamente.')
         }
       } finally {
         if (active) {

@@ -8,6 +8,8 @@ import {
 
 import { Link } from 'react-router-dom'
 import { useRecipeStore } from '../../store/recipeStore'
+import { translateRecipeName } from '../../utils/translations'
+
 import styles from './RecipeCard.module.css'
 
 function RecipeCard({ recipe }) {
@@ -31,7 +33,10 @@ function RecipeCard({ recipe }) {
     if (isFavorite) {
       removeFavorite(recipe.idMeal)
     } else {
-      addFavorite(recipe)
+      addFavorite({
+        ...recipe,
+        strMeal: translateRecipeName(recipe.strMeal)
+      })
     }
   }
 
@@ -43,14 +48,14 @@ function RecipeCard({ recipe }) {
           component="img"
           height="190"
           image={recipe.strMealThumb}
-          alt={recipe.strMeal}
+          alt={translateRecipeName(recipe.strMeal)}
         />
       </Link>
 
       <CardContent>
 
         <h3 className={styles.title}>
-          {recipe.strMeal}
+          {translateRecipeName(recipe.strMeal)}
         </h3>
 
         <Button
