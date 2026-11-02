@@ -77,6 +77,20 @@ const ingredientTranslations = {
   honey: 'Miel',
   chocolate: 'Chocolate',
   water: 'Agua'
+  cucumber: 'Pepino',
+  cucumbers: 'Pepinos',
+  corn: 'Maíz',
+  peas: 'Arvejas',
+  beans: 'Porotos',
+  lettuce: 'Lechuga',
+  apple: 'Manzana',
+  apples: 'Manzanas',
+  banana: 'Banana',
+  bananas: 'Bananas',
+  orange: 'Naranja',
+  oranges: 'Naranjas',
+  strawberry: 'Frutilla',
+  strawberries: 'Frutillas'
 }
 
 const areaTranslations = {
