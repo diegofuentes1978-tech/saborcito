@@ -32,6 +32,7 @@ function Home() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
   const [categories, setCategories] = useState([])
+  const [categoryError, setCategoryError] = useState(false)
 
   const { recipes, loading, error } = useRecipes(
     query,
@@ -39,16 +40,30 @@ function Home() {
   )
 
   useEffect(() => {
+    let active = true
+
     async function loadCategories() {
       try {
         const data = await getCategories()
-        setCategories(data)
+
+        if (active) {
+          setCategories(data)
+          setCategoryError(false)
+        }
       } catch (err) {
         console.error('Error al cargar categorías:', err)
+
+        if (active) {
+          setCategoryError(true)
+        }
       }
     }
 
     loadCategories()
+
+    return () => {
+      active = false
+    }
   }, [])
 
   function handleSearch(value) {
@@ -94,6 +109,13 @@ function Home() {
 
         <section className={styles.categories}>
           <h2>Explorá por categorías 🍽️</h2>
+
+          {categoryError && (
+            <p className={styles.error}>
+              No pudimos cargar las categorías.
+              Revisá tu conexión e intentá nuevamente.
+            </p>
+          )}
 
           <div className={styles.categoryList}>
             <Button
@@ -145,11 +167,12 @@ function Home() {
 
           {!loading && !error && recipes.length === 0 && (
             <p className={styles.message}>
-              No encontramos recetas. Probá con otra búsqueda.
+              No encontramos recetas.
+              Probá con otra búsqueda.
             </p>
           )}
 
-          {!loading && recipes.length > 0 && (
+          {!loading && !error && recipes.length > 0 && (
             <div className={styles.grid}>
               {recipes.map((recipe) => (
                 <RecipeCard

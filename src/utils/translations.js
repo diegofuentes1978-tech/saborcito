@@ -76,8 +76,8 @@ const ingredientTranslations = {
   bread: 'Pan',
   honey: 'Miel',
   chocolate: 'Chocolate',
-  water: 'Agua'
-  cucumber: 'Pepino',
+  water: 'Agua',
+cucumber: 'Pepino',
   cucumbers: 'Pepinos',
   corn: 'Maíz',
   peas: 'Arvejas',
