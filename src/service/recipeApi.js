@@ -41,3 +41,16 @@ export async function getCategories() {
 
   return data.categories || []
 }
+export async function getRecipesByCategory(category) {
+  const response = await fetch(
+    `${API_URL}/filter.php?c=${encodeURIComponent(category)}`
+  )
+
+  if (!response.ok) {
+    throw new Error('No se pudieron obtener las recetas')
+  }
+
+  const data = await response.json()
+
+  return data.meals || []
+}

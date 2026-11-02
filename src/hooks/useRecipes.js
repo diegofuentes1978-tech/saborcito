@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react'
-import { searchRecipes } from '../services/recipeApi'
 
-export function useRecipes(query = '') {
+import { useEffect, useState } from 'react'
+import {
+  searchRecipes,
+  getRecipesByCategory
+} from '/src/service/recipeApi.js'
+
+export function useRecipes(query = '', category = '') {
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -14,7 +18,9 @@ export function useRecipes(query = '') {
         setLoading(true)
         setError('')
 
-        const data = await searchRecipes(query)
+        const data = category
+          ? await getRecipesByCategory(category)
+          : await searchRecipes(query)
 
         if (active) {
           setRecipes(data)
@@ -35,11 +41,7 @@ export function useRecipes(query = '') {
     return () => {
       active = false
     }
-  }, [query])
+  }, [query, category])
 
-  return {
-    recipes,
-    loading,
-    error,
-  }
+  return { recipes, loading, error }
 }

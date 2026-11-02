@@ -1,8 +1,6 @@
-import { Routes, Route } from 'react-router-dom'
 
-function Home() {
-  return <h1>Bienvenidos a Saborcito 🍲</h1>
-}
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/Home/Home'
 
 function Favorites() {
   return <h1>Mis recetas favoritas ❤️</h1>

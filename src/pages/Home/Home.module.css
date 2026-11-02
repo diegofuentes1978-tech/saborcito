@@ -1,0 +1,106 @@
+
+.main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 35px 25px;
+}
+
+.hero {
+  background: linear-gradient(135deg, #ffe1c7, #fff0cf);
+  padding: 65px 25px;
+  border-radius: 28px;
+  text-align: center;
+}
+
+.tag {
+  color: #e56c4c;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.hero h1 {
+  font-size: clamp(30px, 5vw, 52px);
+  margin: 18px 0;
+  color: #343434;
+}
+
+.hero h1 span {
+  color: #f26b4f;
+}
+
+.hero p {
+  color: #666;
+  max-width: 550px;
+  margin: auto;
+  line-height: 1.7;
+}
+
+.categories,
+.recipes {
+  margin-top: 50px;
+}
+
+.categories h2,
+.recipes h2 {
+  font-size: 24px;
+  margin-bottom: 22px;
+}
+
+.categoryList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.categoryList button {
+  border-radius: 25px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.message {
+  padding: 40px;
+  text-align: center;
+  color: #777;
+}
+
+.message p {
+  margin-top: 15px;
+}
+
+.error {
+  padding: 20px;
+  color: #c0392b;
+  background: #ffe6e2;
+  border-radius: 12px;
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 550px) {
+  .main {
+    padding: 20px 15px;
+  }
+
+  .hero {
+    padding: 45px 15px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .categories h2,
+  .recipes h2 {
+    font-size: 20px;
+  }
+}
